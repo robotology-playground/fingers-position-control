@@ -250,7 +250,9 @@ bool HandController::close() {
 }
 
 bool HandController::set(const string& context, const string& file) {
-  return false;
+  this->context=context;
+  this->file=file;
+  return true;
 }
 
 bool HandController::set(const string& key, const Value& value) {
