@@ -1,29 +1,27 @@
-# Copyright (C) 2017 Fondazione Istituto Italiano di Tecnologia (IIT)  
+# Copyright (C) 2017 Fondazione Istituto Italiano di Tecnologia (IIT)
 # All Rights Reserved.
 # Authors: Ugo Pattacini <ugo.pattacini@iit.it>
 
-set(LIBRARY_TARGET_NAME FingersPositionControl)
-
-set(${LIBRARY_TARGET_NAME}_SRC src/HandController.cpp)
-set(${LIBRARY_TARGET_NAME}_HDR include/TactileControl/HandController.h)
+set(${PROJECT_NAME}_SRC src/HandController.cpp)
+set(${PROJECT_NAME}_HDR include/TactileControl/HandController.h)
 
 add_definitions(${YARP_DEFINES})
 
-add_library(${LIBRARY_TARGET_NAME} ${${LIBRARY_TARGET_NAME}_SRC} ${${LIBRARY_TARGET_NAME}_HDR})
-set_target_properties(${LIBRARY_TARGET_NAME} PROPERTIES VERSION       ${${PROJECT_NAME}_VERSION}
-                                                        PUBLIC_HEADER "${${LIBRARY_TARGET_NAME}_HDR}")
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC} ${${PROJECT_NAME}_HDR})
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION}
+                                      PUBLIC_HEADER "${${LIBRARY_TARGET_NAME}_HDR}")
 
-target_link_libraries(${LIBRARY_TARGET_NAME} ${YARP_LIBRARIES} perceptiveModels actionPrimitives)
+target_link_libraries(${PROJECT_NAME} ${YARP_LIBRARIES} perceptiveModels actionPrimitives)
 
-target_include_directories(${LIBRARY_TARGET_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-                                                         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>"
-                                                         ${YARP_INCLUDE_DIRS} ${ICUB_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                                                  "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}>"
+                                                  ${YARP_INCLUDE_DIRS} ${ICUB_INCLUDE_DIRS})
 
-install(TARGETS ${LIBRARY_TARGET_NAME}
+install(TARGETS ${PROJECT_NAME}
         EXPORT  ${PROJECT_NAME}
-        LIBRARY       DESTINATION "${CMAKE_INSTALL_LIBDIR}"                            COMPONENT shlib
-        ARCHIVE       DESTINATION "${CMAKE_INSTALL_LIBDIR}"                            COMPONENT lib
-        RUNTIME       DESTINATION "${CMAKE_INSTALL_BINDIR}"                            COMPONENT bin
-        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${LIBRARY_TARGET_NAME}" COMPONENT dev)
+        LIBRARY       DESTINATION "${CMAKE_INSTALL_LIBDIR}"                     COMPONENT shlib
+        ARCHIVE       DESTINATION "${CMAKE_INSTALL_LIBDIR}"                     COMPONENT lib
+        RUNTIME       DESTINATION "${CMAKE_INSTALL_BINDIR}"                     COMPONENT bin
+        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}" COMPONENT dev)
 
-set_property(GLOBAL APPEND PROPERTY ${PROJECT_NAME}_TARGETS ${LIBRARY_TARGET_NAME})
+set_property(GLOBAL APPEND PROPERTY ${PROJECT_NAME}_TARGETS ${PROJECT_NAME})
