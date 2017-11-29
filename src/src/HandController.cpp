@@ -215,7 +215,16 @@ bool HandController::open() {
   string fileName(hand + "_" + file);
   config.fromConfigFile(rf.findFileByName(fileName));
 
-  action = new tactileControl::ActionPrimitivesHandOnly(config);
+  string grasp_model_file=rf.findFileByName(config.find("grasp_model_file").asString());
+  string hand_sequences_file=rf.findFileByName(config.find("hand_sequences_file").asString());
+
+  Property configRelocated=config;
+  configRelocated.unput("grasp_model_file");
+  configRelocated.unput("hand_sequences_file");
+  configRelocated.put("grasp_model_file",grasp_model_file);
+  configRelocated.put("hand_sequences_file",hand_sequences_file);
+
+  action = new tactileControl::ActionPrimitivesHandOnly(configRelocated);
   if (action->isValid()) {
     Model* model;
     action->getGraspModel(model);

@@ -16,6 +16,10 @@ list(APPEND CMAKE_MODULE_PATH ${YARP_MODULE_PATH})
 list(APPEND CMAKE_MODULE_PATH ${ICUB_MODULE_PATH})
 list(APPEND CMAKE_MODULE_PATH ${ICUBCONTRIB_MODULE_PATH})
 
+include(YarpInstallationHelpers)
+include(ICUBcontribOptions)
+include(ICUBcontribHelpers)
+
 option(BUILD_SHARED_LIBS "Build libraries as shared as opposed to static" ON)
 option(BUILD_TESTING "Create tests using CMake" OFF)
 option(ENABLE_RPATH "Enable RPATH for this library" ON)
@@ -37,6 +41,8 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
       set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "Release")
   endif()
 endif()
+
+icubcontrib_set_default_prefix()
 
 add_subdirectory(src)
 add_subdirectory(app)
