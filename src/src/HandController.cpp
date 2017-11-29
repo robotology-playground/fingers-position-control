@@ -64,15 +64,6 @@ class ActionPrimitivesHandOnly : public ActionPrimitives {
   }
 
  public:
-  ActionPrimitivesHandOnly() : ActionPrimitives() {
-  }
-
-  ActionPrimitivesHandOnly(yarp::os::Property& opt) : ActionPrimitives(opt) {
-  }
-
-  virtual ~ActionPrimitivesHandOnly() {
-  }
-
   bool open(yarp::os::Property& opt)override {
     if (configured)
       return true;
@@ -215,32 +206,43 @@ bool HandController::open() {
   string fileName(hand + "_" + file);
   config.fromConfigFile(rf.findFileByName(fileName));
 
-  string grasp_model_file=rf.findFileByName(config.find("grasp_model_file").asString());
-  string hand_sequences_file=rf.findFileByName(config.find("hand_sequences_file").asString());
+  string grasp_model_file = rf.findFileByName(config.find("grasp_model_file").asString());
+  string hand_sequences_file = rf.findFileByName(config.find("hand_sequences_file").asString());
 
-  Property configRelocated=config;
+  Property configRelocated = config;
   configRelocated.unput("grasp_model_file");
   configRelocated.unput("hand_sequences_file");
-  configRelocated.put("grasp_model_file",grasp_model_file);
-  configRelocated.put("hand_sequences_file",hand_sequences_file);
+  configRelocated.put("grasp_model_file", grasp_model_file);
+  configRelocated.put("hand_sequences_file", hand_sequences_file);
 
-  action = new tactileControl::ActionPrimitivesHandOnly(configRelocated);
-  if (action->isValid()) {
+  action = new tactileControl::ActionPrimitivesHandOnly();
+  if (action->open(configRelocated)) {
     Model* model;
     action->getGraspModel(model);
     if (model != nullptr) {
       if (!model->isCalibrated()) {
+        Bottle fingers;
+        Bottle& fng = fingers.addList();
+        fng.addString("index");
+        fng.addString("middle");
+        fng.addString("ring");
+        fng.addString("little");
+
         Property prop;
-        prop.put("finger", "all");
+        prop.put("finger", fingers.get(0));
+        model->calibrate(prop);
+
+        prop.clear();
+        prop.put("finger", "thumb");
         model->calibrate(prop);
 
         ofstream fout;
         fout.open((rf.getHomeContextPath() + "/" + fileName).c_str());
         model->toStream(fout);
         fout.close();
-
-        return true;
       }
+      
+      return true;
     }
   }
 
@@ -259,8 +261,8 @@ bool HandController::close() {
 }
 
 bool HandController::set(const string& context, const string& file) {
-  this->context=context;
-  this->file=file;
+  this->context = context;
+  this->file = file;
   return true;
 }
 
