@@ -206,14 +206,16 @@ bool HandController::open() {
   string fileName(hand + "_" + file);
   config.fromConfigFile(rf.findFileByName(fileName));
 
-  string grasp_model_file = rf.findFileByName(config.find("grasp_model_file").asString());
-  string hand_sequences_file = rf.findFileByName(config.find("hand_sequences_file").asString());
+  string grasp_model_file = config.find("grasp_model_file").asString();
+  string hand_sequences_file = config.find("hand_sequences_file").asString();
+  string abspath_grasp_model_file = rf.findFileByName(grasp_model_file);
+  string abspath_hand_sequences_file = rf.findFileByName(hand_sequences_file);
 
   Property configRelocated = config;
   configRelocated.unput("grasp_model_file");
   configRelocated.unput("hand_sequences_file");
-  configRelocated.put("grasp_model_file", grasp_model_file);
-  configRelocated.put("hand_sequences_file", hand_sequences_file);
+  configRelocated.put("grasp_model_file", abspath_grasp_model_file);
+  configRelocated.put("hand_sequences_file", abspath_hand_sequences_file);
 
   action = new tactileControl::ActionPrimitivesHandOnly();
   if (action->open(configRelocated)) {
@@ -237,7 +239,7 @@ bool HandController::open() {
         model->calibrate(prop);
 
         ofstream fout;
-        fout.open((rf.getHomeContextPath() + "/" + fileName).c_str());
+        fout.open((rf.getHomeContextPath() + "/" + grasp_model_file).c_str());
         model->toStream(fout);
         fout.close();
       }
@@ -260,13 +262,13 @@ bool HandController::close() {
     return false;
 }
 
-bool HandController::set(const string& context, const string& file) {
+bool HandController::set(string context, string file) {
   this->context = context;
   this->file = file;
   return true;
 }
 
-bool HandController::set(const string& key, const Value& value) {
+bool HandController::set(const ConstString& key, const Value& value) {
   if ((key == "hand") && value.isString()) {
     string hand = value.asString();
     if ((hand == "left") || (hand == "right")) {

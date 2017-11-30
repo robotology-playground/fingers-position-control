@@ -34,8 +34,8 @@ class HandController {
   virtual bool open();
   virtual bool close();
 
-  virtual bool set(const std::string& context, const std::string& file);
-  virtual bool set(const std::string& key, const yarp::os::Value& value);
+  virtual bool set(std::string context, std::string file);
+  virtual bool set(const yarp::os::ConstString& key, const yarp::os::Value& value);
 
   virtual bool closeHand(const bool wait = true);
   virtual bool isHandClose();
