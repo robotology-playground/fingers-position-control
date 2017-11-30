@@ -1,0 +1,16 @@
+find_package(YARP QUIET)
+find_package(ICUB QUIET)
+
+set(FingersPositionControl_VERSION @FingersPositionControl_VERSION@)
+
+@PACKAGE_INIT@
+
+set(FingersPositionControl_INCLUDEDIR "@PACKAGE_FingersPositionControl_INCLUDEDIR@")
+
+if(NOT TARGET FingersPositionControl::FingersPositionControl)
+  include("${CMAKE_CURRENT_LIST_DIR}/FingersPositionControlTargets.cmake")
+endif()
+
+# Compatibility
+set(FingersPositionControl_LIBRARIES FingersPositionControl::FingersPositionControl)
+set(FingersPositionControl_INCLUDE_DIRS ${FingersPositionControl_INCLUDEDIR})
