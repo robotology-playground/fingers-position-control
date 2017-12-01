@@ -16,15 +16,15 @@
 #include <yarp/os/ResourceFinder.h>
 
 #include <iCub/perception/models.h>
-#include "TactileControl/HandController.h"
+#include "FingersPositionControl/HandController.h"
 
 using namespace std;
 using namespace yarp::os;
 using namespace iCub::perception;
 using namespace iCub::action;
-using namespace tactileControl;
+using namespace fingersPositionControl;
 
-namespace tactileControl {
+namespace fingersPositionControl {
 
 class ActionPrimitivesHandOnly : public ActionPrimitives {
  protected:
@@ -217,7 +217,7 @@ bool HandController::open() {
   configRelocated.put("grasp_model_file", abspath_grasp_model_file);
   configRelocated.put("hand_sequences_file", abspath_hand_sequences_file);
 
-  action = new tactileControl::ActionPrimitivesHandOnly();
+  action = new fingersPositionControl::ActionPrimitivesHandOnly();
   if (action->open(configRelocated)) {
     Model* model;
     action->getGraspModel(model);
@@ -243,7 +243,7 @@ bool HandController::open() {
         model->toStream(fout);
         fout.close();
       }
-      
+
       return true;
     }
   }
@@ -262,13 +262,13 @@ bool HandController::close() {
     return false;
 }
 
-bool HandController::set(string context, string file) {
+bool HandController::set(const string& context, const string& file) {
   this->context = context;
   this->file = file;
   return true;
 }
 
-bool HandController::set(const ConstString& key, const Value& value) {
+bool HandController::set(const string& key, const Value& value) {
   if ((key == "hand") && value.isString()) {
     string hand = value.asString();
     if ((hand == "left") || (hand == "right")) {

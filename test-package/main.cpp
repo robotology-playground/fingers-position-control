@@ -14,7 +14,7 @@
 #include <yarp/os/Network.h>
 #include <yarp/os/Value.h>
 #include <yarp/os/ResourceFinder.h>
-#include "TactileControl/HandController.h"
+#include "FingersPositionControl/HandController.h"
 
 int main(int argc, char *argv[]) {
   yarp::os::Network yarp;
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   rf.configure(argc, argv);
 
   yInfo()<<"Declaring the controller";
-  tactileControl::HandController ctrl;
+  fingersPositionControl::HandController ctrl;
   ctrl.set("hand", yarp::os::Value(rf.find("hand").asString()));
   ctrl.set("FingersPositionControl", rf.find("file").asString());
 

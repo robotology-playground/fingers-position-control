@@ -13,7 +13,7 @@
 #include <yarp/os/LogStream.h>
 #include <yarp/os/Network.h>
 #include <yarp/os/Value.h>
-#include "TactileControl/HandController.h"
+#include "FingersPositionControl/HandController.h"
 
 int main() {
   yarp::os::Network yarp;
@@ -23,7 +23,7 @@ int main() {
   }
 
   yInfo()<<"Declaring the controller";
-  tactileControl::HandController ctrl;
+  fingersPositionControl::HandController ctrl;
   ctrl.set("hand", yarp::os::Value("right"));
   ctrl.set("FingersPositionControl", "config_sim.ini");
 

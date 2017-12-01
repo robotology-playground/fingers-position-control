@@ -3,13 +3,13 @@
 # Authors: Ugo Pattacini <ugo.pattacini@iit.it>
 
 set(${PROJECT_NAME}_SRC src/HandController.cpp)
-set(${PROJECT_NAME}_HDR include/TactileControl/HandController.h)
+set(${PROJECT_NAME}_HDR include/FingersPositionControl/HandController.h)
 
 add_definitions(${YARP_DEFINES})
 
 add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRC} ${${PROJECT_NAME}_HDR})
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION}
-                                      PUBLIC_HEADER "${${LIBRARY_TARGET_NAME}_HDR}")
+                                      PUBLIC_HEADER "${${PROJECT_NAME}_HDR}")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${YARP_LIBRARIES} perceptiveModels actionPrimitives)
 
